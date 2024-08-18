@@ -1,6 +1,6 @@
 "use client"
 
-export const TextInput = ({
+export const Textinput = ({
     placeholder,
     onChange,
     label
