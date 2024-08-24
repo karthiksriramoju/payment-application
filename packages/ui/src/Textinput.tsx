@@ -1,12 +1,13 @@
 "use client"
 
-export const Textinput = ({
+export const TextInput = ({
     placeholder,
     onChange,
     label
 }: {
     placeholder: string;
     onChange: (value: string) => void;
+    value?:string,
     label: string;
 }) => {
     return <div className="pt-2">

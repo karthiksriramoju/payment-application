@@ -42,12 +42,12 @@ async function getOnRampP2pTransactions() {
 
   // Combine and mark each transaction as "Received" or "Sent"
   const transactions = [
-    ...receivedTxns.map((t) => ({
+    ...receivedTxns.map((t:any) => ({
       time: t.timestamp,
       amount: t.amount,
       type: "Received",
     })),
-    ...sentTxns.map((t) => ({
+    ...sentTxns.map((t:any) => ({
       time: t.timestamp,
       amount: t.amount,
       type: "Sent",

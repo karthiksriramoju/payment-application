@@ -1,9 +1,16 @@
 {
-    "extends": "@repo/typescript-config/react-library.json",
-    "compilerOptions": {
-      "outDir": "dist"
+  "compilerOptions": {
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@repo/db/*": ["src/*"]
     },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist"]
-  }
-  
+    "target": "ES6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -4,7 +4,7 @@ import { Card } from "@repo/ui/card";
 import { Center } from "@repo/ui/center";
 import { Select } from "@repo/ui/select";
 import { useState } from "react"
-import { Textinput } from "@repo/ui/textInput";
+import { TextInput } from "@repo/ui/textInput";
 import { createOnRampTransactions } from "../lib/actions/createOnrampTransaction";
 
 const SUPPORTED_BANKS = [{
@@ -21,7 +21,7 @@ export const AddMoney = () => {
     const [redirectUrl, setRedirectUrl] = useState(SUPPORTED_BANKS[0]?.redirectUrl);
     return <Card title="Add Money">
     <div className="w-full">
-        <Textinput label={"Amount"} placeholder={"Amount"} onChange={(val) => {
+        <TextInput label={"Amount"} placeholder={"Amount"} onChange={(val) => {
           setValue(Number(val))
         }} />
         <div className="py-4 text-left">

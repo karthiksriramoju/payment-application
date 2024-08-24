@@ -2,7 +2,7 @@
 
 import { Button } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
-import { Textinput } from "@repo/ui/textInput";
+import { TextInput } from "@repo/ui/textInput";
 import { useState } from "react";
 import { p2pTransfer } from "../lib/actions/p2ptransfer";
 
@@ -34,17 +34,17 @@ export function SendCard() {
     <div className="h-[90vh]">
       <Card title="Send">
         <div className="min-w-72 pt-2">
-          <Textinput
+          <TextInput
             placeholder="Number"
             label="Number"
             value={number}
-            onChange={(value) => setNumber(value)}
+            onChange={(value:any) => setNumber(value)}
           />
-          <Textinput
+          <TextInput
             placeholder="Amount"
             label="Amount"
             value={amount}
-            onChange={(value) => setAmount(value)}
+            onChange={(value:any) => setAmount(value)}
           />
           <div className="pt-4 flex justify-center">
             <Button onClick={handleTransfer}>Send</Button>

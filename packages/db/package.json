@@ -1,16 +1,22 @@
 {
     "name": "@repo/db",
     "version": "0.0.0",
+    "scripts": {
+      "build": "tsc"
+    },
     "dependencies": {
-        "@prisma/client": "^5.11.0"
+      "@prisma/client": "^5.11.0"
     },
     "devDependencies": {
-        "prisma": "5.11.0"
+      "prisma": "5.11.0",
+      "typescript": "^5.0.0", 
+      "ts-node": "^10.0.0" 
     },
     "exports": {
-        "./client": "./index.ts"
+      "./client": "./dist/index.js" 
     },
     "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-}
-}
+      "seed": "ts-node prisma/seed.ts"
+    }
+  }
+  

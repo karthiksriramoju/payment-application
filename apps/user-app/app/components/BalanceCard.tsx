@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 interface BalanceCardProps {
   amount: number;
   locked: number;
+  className?: string; 
 }
 
 
