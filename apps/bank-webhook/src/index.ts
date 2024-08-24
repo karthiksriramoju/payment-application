@@ -1,5 +1,7 @@
 import express from "express";
 import db from "@repo/db/client";
+import './scheduler'; // 
+
 const app = express();
 
 app.use(express.json());
@@ -8,7 +10,7 @@ app.post("/hdfcWebhook", async (req, res) => {
     const paymentInformation = {
         token: req.body.token,
         userId: req.body.user_identifier,
-        amount: req.body.amount
+        amount: req.body.amount * 100
     };
     console.log(req.body.user_identifier);
     console.log(req.body.token);
