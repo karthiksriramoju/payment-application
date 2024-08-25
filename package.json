@@ -6,6 +6,7 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "db:generate":"cd packages/db && npx prisma generate && cd ../..",
+    "start-user-app": "cd ./apps/user-app && npm run start",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
