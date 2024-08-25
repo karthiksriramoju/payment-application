@@ -24,7 +24,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: 100xdevs/web-app:latest  # Replace with your Docker Hub username and repository
+        tags: karthik1417/patym-project-2  # Replace with your Docker Hub username and repository
 
     - name: Verify Pushed Image
-      run: docker pull 100xdevs/web-app:latest  # Replace with your Docker Hub username and repository
+      run: docker pull karthik1417/patym-project-2  # Replace with your Docker Hub username and repository
