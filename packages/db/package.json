@@ -8,7 +8,7 @@
         "@prisma/client": "^5.18.0"
     },
     "devDependencies": {
-        "prisma": "5.11.0",
+        "prisma": "^5.18.0",
         "ts-node": "^10.0.0",
         "typescript": "^5.0.0"
     },
