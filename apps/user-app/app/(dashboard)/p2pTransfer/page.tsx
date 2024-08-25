@@ -5,7 +5,7 @@ import { authOptions } from "../../lib/auth";
 import prisma from "@repo/db/client";
 import { OnRampP2p } from "../../components/OnRampP2p";
 import { BalanceCard2 } from "../../components/BalanceCard2";
-import { CombinedTransactions } from "../../components/CombinedTransactions";
+
 
 async function getBalance() {
   const session = await getServerSession(authOptions);
@@ -43,14 +43,14 @@ async function getOnRampP2pTransactions() {
   // Combine and mark each transaction as "Received" or "Sent"
   const transactions = [
     ...receivedTxns.map((t:any) => ({
-      time: t.timestamp,
+      time: new Date(t.timestamp), // Convert to Date
       amount: t.amount,
-      type: "Received",
+      type: "Received" as const, // Ensure correct type
     })),
     ...sentTxns.map((t:any) => ({
-      time: t.timestamp,
+      time: new Date(t.timestamp), // Convert to Date
       amount: t.amount,
-      type: "Sent",
+      type: "Sent" as const, // Ensure correct type
     })),
   ];
 
