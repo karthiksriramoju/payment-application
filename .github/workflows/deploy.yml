@@ -44,7 +44,7 @@ jobs:
           sudo docker pull karthik1417/patym-project-2:latest
           sudo docker stop web-app || true
           sudo docker rm web-app || true
-          sudo docker run -e DATABASE_URL=${{ secrets.DB_URL }} --restart always -d --name patym-project-2 -p 3005:3005 karthik1417/patym-project-2:latest
+          sudo docker run -e DATABASE_URL=${{ secrets.DB_URL }} --restart always -d --name web-app -p 3005:3005 karthik1417/patym-project-2:latest
 
     - name: Deploy Express App to EC2
       uses: appleboy/ssh-action@master
