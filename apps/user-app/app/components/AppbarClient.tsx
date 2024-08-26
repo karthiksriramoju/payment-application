@@ -1,19 +1,24 @@
-"use client"
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Appbar } from "@repo/ui/appbar";
+import {signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Appbar } from "@repo/ui/appbar";
 
 export function AppbarClient() {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const handleSignOut = async () => {
+    // Sign out without redirecting automatically
+    await signOut({ redirect: false });
+
+    // Redirect to home page after sign out
+    router.push("/signin");
+  };
+
   return (
     <div>
       <Appbar 
-        onSignin={signIn} 
-        onSignout={async () => {
-          await signOut({ callbackUrl: "http://ec2-13-60-180-62.eu-north-1.compute.amazonaws.com" });
-        }}
+        onSignin={() => signIn()} 
+        onSignout={handleSignOut} 
         user={session?.user} 
       />
     </div>
