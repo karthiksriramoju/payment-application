@@ -44,7 +44,7 @@ export default async function HomePage() {
   return (
     <div className="w-screen px-4 py-8">
       <div className="text-3xl text-[#6a51a6] font-bold mb-4">
-        Welcome {session?.user?.name || "Back!"}
+        Welcome {session?.user?.name || " "}
       </div>
 
       {/* BalanceCard taking full width */}
