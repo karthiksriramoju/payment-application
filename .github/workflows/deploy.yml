@@ -1,4 +1,4 @@
-name: Build and Deploy to Docker Hub
+name: Build and Deploy
 
 on:
   push:
@@ -18,26 +18,42 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Docker image
+    - name: Build and Push Docker Image for Next.js App
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./Dockerfile
+        file: ./Dockerfile  # Path to the Dockerfile for the Next.js app in the root folder
         push: true
-        tags: karthik1417/patym-project-2  # Replace with your Docker Hub username and repository
+        tags: karthik1417/patym-project-2:latest  # Docker Hub repository for the Next.js app
 
-    - name: Verify Pushed Image
-      run: docker pull karthik1417/patym-project-2  # Replace with your Docker Hub username and repository
+    - name: Build and Push Docker Image for Express App
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./docker/Dockerfile.bank  # Path to the Dockerfile for the Express app
+        push: true
+        tags: karthik1417/patym-webhook:latest  # Docker Hub repository for the Express app
 
-    - name: Deploy to EC2
+    - name: Deploy Next.js App to EC2
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          sudo docker pull karthik1417/patym-project-2
+          sudo docker pull karthik1417/patym-project-2:latest
           sudo docker stop web-app || true
           sudo docker rm web-app || true
-          sudo docker run -e DATABASE_URL=${{ secrets.DB_URL }} --restart always -d --name web-app -p 3005:3000 karthik1417/patym-project-2
+          sudo docker run -e DATABASE_URL=${{ secrets.DB_URL }} --restart always -d --name patym-project-2 -p 3005:3000 karthik1417/patym-project-2:latest
 
+    - name: Deploy Express App to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST_BANK }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          sudo docker pull karthik1417/patym-webhook:latest
+          sudo docker stop patym-webhook || true
+          sudo docker rm patym-webhook || true
+          sudo docker run -e DATABASE_URL=${{ secrets.DB_URL }} --restart always -d --name patym-webhook -p 3003:3003 karthik1417/patym-webhook:latest
