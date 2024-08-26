@@ -73,5 +73,6 @@ export const authOptions = {
     pages: {
       signIn: "/signin", // Path to the custom sign-in page
     },
+    url: process.env.NEXTAUTH_URL,
   }
   
