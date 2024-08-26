@@ -12,7 +12,7 @@ export function AppbarClient() {
       <Appbar 
         onSignin={signIn} 
         onSignout={async () => {
-          await signOut({ callbackUrl: "/sigin" });
+          await signOut({ callbackUrl: "/signin" });
         }}
         user={session?.user} 
       />
