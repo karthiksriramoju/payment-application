@@ -31,7 +31,7 @@ export default function SignInPage() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <h1 className="text-2xl font-semibold text-center text-black mb-6">
-          Sign In / Sign Up 
+          Sign In / Sign Up  
         </h1>
         {error && (
           <p className="text-red-500 text-center mb-4">{error}</p>
