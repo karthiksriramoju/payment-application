@@ -1,24 +1,100 @@
+"use client"
 import { SidebarItem } from "../components/SidebarItem";
+import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function Layout({
   children,
 }: {
   children: React.ReactNode;
 }): JSX.Element {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleNavigation = (href: string) => {
+    router.push(href);
+    setIsSidebarOpen(false);
+  };
+
   return (
-    <div className="flex">
-        <div className="w-72 border-r border-slate-300 min-h-screen mr-4 pt-28">
-            <div>
-                <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
-                <SidebarItem href={"/transfer"} icon={<TransferIcon />} title="Transfer" />
-                <SidebarItem href={"/transactions"} icon={<TransactionsIcon />} title="Transactions" />
-                <SidebarItem href={"/p2pTransfer"} icon={<P2PTransferIcon />} title="P2P Transfer" />
-            </div>
+    <div className="flex flex-col md:flex-row">
+      {/* Mobile menu button */}
+      <button
+        className="md:hidden fixed top-4 left-4 z-20 p-2 rounded-md bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        aria-label="Toggle menu"
+      >
+        <svg
+          className="w-6 h-6 text-gray-600"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          {isSidebarOpen ? (
+            <path d="M6 18L18 6M6 6l12 12" />
+          ) : (
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          )}
+        </svg>
+      </button>
+
+      {/* Sidebar */}
+      <div
+        className={`${
+          isSidebarOpen ? "block" : "hidden"
+        } md:block fixed md:static w-full md:w-72 bg-white border-r border-slate-300 min-h-screen z-10 transition-all duration-300 ease-in-out`}
+      >
+        <div className="pt-16 md:pt-28">
+          <div onClick={() => handleNavigation("/dashboard")}>
+            <SidebarItem 
+              href="/dashboard" 
+              icon={<HomeIcon />} 
+              title="Home" 
+              selected={pathname === "/dashboard"}
+            />
+          </div>
+          <div onClick={() => handleNavigation("/transfer")}>
+            <SidebarItem 
+              href="/transfer" 
+              icon={<TransferIcon />} 
+              title="Transfer" 
+              selected={pathname === "/transfer"}
+            />
+          </div>
+          <div onClick={() => handleNavigation("/transactions")}>
+            <SidebarItem 
+              href="/transactions" 
+              icon={<TransactionsIcon />} 
+              title="Transactions" 
+              selected={pathname === "/transactions"}
+            />
+          </div>
+          <div onClick={() => handleNavigation("/p2pTransfer")}>
+            <SidebarItem 
+              href="/p2pTransfer" 
+              icon={<P2PTransferIcon />} 
+              title="P2P Transfer" 
+              selected={pathname === "/p2pTransfer"}
+            />
+          </div>
         </div>
-            {children}
+      </div>
+
+      {/* Main content */}
+      <div className="flex-1 pt-16 md:pt-0">
+        {children}
+      </div>
     </div>
   );
 }
+
+// Icon components remain the same
+
+// Icon components remain the same
 
 // Icons Fetched from https://heroicons.com/
 function HomeIcon() {

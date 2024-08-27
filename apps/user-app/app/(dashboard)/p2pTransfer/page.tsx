@@ -63,7 +63,7 @@ export default async function Page() {
   const transactions = await getOnRampP2pTransactions();
 
   return (
-    <div className="w-screen px-4 py-8">
+    <div className="w-full px-4 py-8">
       <div className="text-3xl text-[#6a51a6] font-bold mb-6">
         P2P Transfers
       </div>
