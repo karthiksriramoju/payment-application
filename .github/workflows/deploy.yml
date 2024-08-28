@@ -57,3 +57,4 @@ jobs:
           sudo docker stop patym-webhook || true
           sudo docker rm patym-webhook || true
           sudo docker run -e DATABASE_URL=${{ secrets.DB_URL }} --restart always -d --name patym-webhook -p 3003:3003 karthik1417/patym-webhook:latest
+
