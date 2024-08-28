@@ -31,7 +31,7 @@ export function SendCard() {
   };
 
   return (
-    <div className="h-[90vh]">
+    <div className="h-auto mb-6"> {/* Removed fixed height */}
       <Card title="Send">
         <div className="min-w-72 pt-2">
           <TextInput

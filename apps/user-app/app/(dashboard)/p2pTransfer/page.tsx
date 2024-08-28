@@ -68,7 +68,7 @@ export default async function Page() {
         P2P Transfers
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div>
+        <div className="mb-6 md:mb-0"> {/* Add margin-bottom for mobile */}
           <SendCard />
         </div>
         <div>

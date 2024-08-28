@@ -42,7 +42,7 @@ export default async function HomePage() {
   const recentTransactions = await getRecentTransactions();
 
   return (
-    <div className="w-screen px-4 py-8">
+    <div className="w-full mx-auto px-4 py-8">
       <div className="text-3xl text-[#6a51a6] font-bold mb-4">
         Welcome {session?.user?.name || "!"}
       </div>
