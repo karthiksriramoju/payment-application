@@ -1,81 +1,62 @@
-# Turborepo starter
+# Paytm-Like Payment App
 
-This is an official starter Turborepo.
+## 🚀 Overview
+I've completed the development of a **Paytm-like payment app**! This project has been both challenging and rewarding, helping me advance my skills significantly.
 
-## Using this example
+## 🛠 Tech Stack
+- **Frontend & Backend:** Next.js
+- **Auxiliary Backend:** Express
+- **Monorepo Management:** Turborepo
+- **Database:** PostgreSQL with Prisma ORM
+- **UI Styling:** Tailwind CSS
+- **Authentication:** NextAuth
+- **Language:** TypeScript
 
-Run the following command:
+## 💰 About the App
+- **Add Money from Bank:** Users can add money from their bank directly into the app. I implemented a **custom bank-webhook using Express** to simulate the process of adding funds, even though it’s a dummy webhook designed for this project.
+- **Money Transfers:** Transfer funds to friends via phone number with ease.
+- **Transaction History:** Users can review their recent transactions, keeping track of their spending.
 
-```sh
-npx create-turbo@latest
-```
+## 🏗 Development Process
+- **Next.js** was used to handle both the frontend and backend.
+- **Express** was used specifically for handling the **bank-webhook**.
+- **PostgreSQL with Prisma ORM** provided a **reliable and scalable** database solution.
+- **Tailwind CSS** allowed for rapid development of responsive and custom UI components.
+- **NextAuth** was integrated for **secure user login and management**.
 
-## What's inside?
+## 🔄 CI/CD
+- Automated testing and deployment with a robust **CI/CD pipeline**, ensuring smooth and reliable updates.
 
-This Turborepo includes the following packages/apps:
+## ☁ Deployment
+- Deployed both the **Next.js app** and the **bank-webhook** to **AWS EC2 using Docker**, providing a **consistent and scalable environment**.
 
-### Apps and Packages
+## 🛠 Setup Instructions
+Follow these steps to set up and run the project:
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+1. **Clone the Repository:**
+   ```sh
+   git clone https://github.com/karthiksriramoju/patym-project-2.git
+   cd patym-project-2
+   ```
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+2. **Install Dependencies:**
+   ```sh
+   npm install
+   ```
 
-### Utilities
+3. **Navigate to the Next.js App:**
+   ```sh
+   cd apps/user-app
+   ```
 
-This Turborepo has some additional tools already setup for you:
+4. **Start the Development Server:**
+   ```sh
+   npm run dev
+   ```
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+5. **Access the Application:**
+   Open your browser and go to `http://localhost:3000`
 
-### Build
+---
 
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+### 📌 Feel free to explore the project and contribute! 🚀
