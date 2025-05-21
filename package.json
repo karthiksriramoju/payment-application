@@ -5,7 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "db:generate":"cd packages/db && npx prisma generate && cd ../..",
+    "db:generate": "cd packages/db && npx prisma generate && cd ../..",
     "start-user-app": "cd ./apps/user-app && npm run start",
     "build-user-app": "npx turbo run build --filter=./apps/user-app...",
     "build-bank-webhook": "npx turbo run build --filter=./apps/bank-webhook...",
