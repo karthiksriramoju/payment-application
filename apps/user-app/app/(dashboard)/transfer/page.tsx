@@ -7,30 +7,47 @@ import { authOptions } from "../../lib/auth";
 
 async function getBalance() {
     const session = await getServerSession(authOptions);
-    const balance = await prisma.balance.findFirst({
-        where: {
-            userId: Number(session?.user?.id)
-        }
-    });
-    return {
-        amount: balance?.amount || 0,
-        locked: balance?.locked || 0
+    if (!session?.user?.id) {
+        return { amount: 0, locked: 0 };
+    }
+    try {
+        const balance = await prisma.balance.findFirst({
+            where: {
+                userId: Number(session.user.id)
+            }
+        });
+        return {
+            amount: balance?.amount || 0,
+            locked: balance?.locked || 0
+        };
+    } catch (error) {
+        console.error('Error fetching balance:', error);
+        return { amount: 0, locked: 0 };
     }
 }
 
 async function getOnRampTransactions() {
     const session = await getServerSession(authOptions);
-    const txns = await prisma.onRampTransaction.findMany({
-        where: {
-            userId: Number(session?.user?.id)
-        }
-    });
-    return txns.map((t :any)=> ({
-        time: t.startTime,
-        amount: t.amount,
-        status: t.status,
-        provider: t.provider
-    }))
+    if (!session?.user?.id) {
+        return [];
+    }
+    try {
+        const txns = await prisma.onRampTransaction.findMany({
+            where: {
+                userId: Number(session.user.id)
+            },
+            orderBy: { startTime: 'desc' }
+        });
+        return txns.map((t :any)=> ({
+            time: t.startTime,
+            amount: t.amount,
+            status: t.status,
+            provider: t.provider
+        }));
+    } catch (error) {
+        console.error('Error fetching transactions:', error);
+        return [];
+    }
 }
 
 export default async function() {

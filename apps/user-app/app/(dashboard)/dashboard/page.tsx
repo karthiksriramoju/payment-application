@@ -8,9 +8,15 @@ import prisma from "@repo/db/client";
 
 async function getBalance() {
   const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return {
+      amount: 0,
+      locked: 0,
+    };
+  }
   const balance = await prisma.balance.findFirst({
     where: {
-      userId: Number(session?.user?.id),
+      userId: Number(session.user.id),
     },
   });
   return {
@@ -21,9 +27,12 @@ async function getBalance() {
 
 async function getRecentTransactions() {
   const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return [];
+  }
   const txns = await prisma.onRampTransaction.findMany({
     where: {
-      userId: Number(session?.user?.id),
+      userId: Number(session.user.id),
     },
     orderBy: { startTime: "desc" },
     take: 4, // Limit to 4 recent transactions
@@ -44,7 +53,7 @@ export default async function HomePage() {
   return (
     <div className="w-full mx-auto px-4 py-8">
       <div className="text-3xl text-[#6a51a6] font-bold mb-4">
-        Welcome {session?.user?.name || "!"}
+        Welcome {"!"}
       </div>
 
       {/* BalanceCard taking full width */}

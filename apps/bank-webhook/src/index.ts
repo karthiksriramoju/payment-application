@@ -1,5 +1,5 @@
-import express from "express";
-import db from "@repo/db/client";
+import express from 'express';
+import prisma from '@repo/db/client';
 import './scheduler'; // 
 
 const app = express();
@@ -7,49 +7,72 @@ const app = express();
 app.use(express.json());
 
 app.post("/hdfcWebhook", async (req, res) => {
-    const paymentInformation = {
-        token: req.body.token,
-        userId: req.body.user_identifier,
-        amount: req.body.amount * 100
-    };
-    console.log(req.body.user_identifier);
-    console.log(req.body.token);
-    console.log(req.body.amount);
-
     try {
-        await db.$transaction([
-            db.balance.upsert({
-                where: {
-                    userId: Number(paymentInformation.userId)
-                },
-                update: {
-                    amount: {
-                        increment: Number(paymentInformation.amount)
-                    }
-                },
-                create: {
-                    userId: Number(paymentInformation.userId),
-                    amount: Number(paymentInformation.amount),
-                    locked: 0
+        const { token, user_identifier, amount } = req.body;
+        if (!token || !user_identifier || !amount) {
+            return res.status(400).json({
+                message: "Token, user_identifier and amount are required"
+            });
+        }
+
+        // First update status to Processing
+        await prisma.onRampTransaction.update({
+            where: { token },
+            data: { status: "Processing" }
+        });
+
+        // Simulate bank processing time (random between 1-3 minutes)
+        const processingTime = Math.floor(Math.random() * (180000 - 60000) + 60000);
+        
+        setTimeout(async () => {
+            try {
+                // 90% chance of success
+                const isSuccess = Math.random() < 0.9;
+                
+                const txn = await prisma.onRampTransaction.findUnique({
+                    where: { token }
+                });
+
+                if (txn) {
+                    await prisma.$transaction([
+                        prisma.onRampTransaction.update({
+                            where: { token },
+                            data: {
+                                status: isSuccess ? "Success" : "Failure"
+                            }
+                        }),
+                        // If successful, update balance
+                        ...(isSuccess ? [
+                            prisma.balance.updateMany({
+                                where: { userId: txn.userId },
+                                data: {
+                                    amount: {
+                                        increment: amount * 100
+                                    }
+                                }
+                            })
+                        ] : [])
+                    ]);
                 }
-            }),
-            db.onRampTransaction.updateMany({
-                where: {
-                    token: paymentInformation.token
-                },
-                data: {
-                    status: "Success",
-                }
-            })
-        ]);
+            } catch (error) {
+                console.error('Error in delayed processing:', error);
+                // Update transaction status to Failed if there's an error
+                await prisma.onRampTransaction.update({
+                    where: { token },
+                    data: { status: "Failure" }
+                });
+            }
+        }, processingTime);
 
         res.json({
-            message: "Captured"
+            message: "Processing started",
+            estimatedTime: Math.floor(processingTime / 1000) // Send estimated time in seconds
         });
-    } catch (e) {
-        console.error(e);
-        res.status(411).json({
-            message: "Error while processing webhook"
+    } catch (error: any) {
+        console.error('Error initiating transaction:', error);
+        res.status(500).json({
+            message: "Error while processing webhook",
+            error: error.message
         });
     }
 });
