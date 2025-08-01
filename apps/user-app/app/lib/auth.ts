@@ -12,7 +12,6 @@ export const authOptions = {
             phone: { label: "Phone number", type: "text", placeholder: "1231231231", required: true },
             password: { label: "Password", type: "password", required: true }
           },
-          // TODO: User credentials type from next-aut
           async authorize(credentials: any) {
             console.log("Authorize called with credentials:", { phone: credentials?.phone, hasPassword: !!credentials?.password });
             
@@ -30,44 +29,35 @@ export const authOptions = {
 
               console.log("Existing user found:", !!existingUser);
 
-              if (existingUser) {
-                const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
-                console.log("Password validation result:", passwordValidation);
-                
-                if (passwordValidation) {
-                  return {
-                    id: existingUser.id.toString(),
-                    name: existingUser.name || credentials.phone,
-                    email: existingUser.number
-                  }
-                }
+              if (!existingUser) {
+                console.log("User not found - sign up required");
                 return null;
               }
 
-              // If user doesn't exist, create a new one
-              console.log("Creating new user");
-              const hashedPassword = await bcrypt.hash(credentials.password, 10);
-              const user = await db.user.create({
-                data: {
-                  number: credentials.phone,
-                  name: credentials.phone, // Use phone as initial name
-                  password: hashedPassword
-                }
-              });
+              // Check if user has a password (should always have one)
+              if (!existingUser.password) {
+                console.log("User exists but has no password");
+                return null;
+              }
 
-              await db.balance.create({
-                data: {
-                  userId: user.id,
-                  amount: 0,
-                  locked: 0
+              console.log("Attempting password comparison...");
+              console.log("Input password length:", credentials.password.length);
+              console.log("Stored password hash length:", existingUser.password.length);
+
+              // Compare passwords
+              const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
+              console.log("Password validation result:", passwordValidation);
+              
+              if (passwordValidation) {
+                console.log("Password validation successful - returning user");
+                return {
+                  id: existingUser.id.toString(),
+                  name: existingUser.name || credentials.phone,
+                  email: existingUser.number
                 }
-              });
-          
-              console.log("New user created successfully");
-              return {
-                id: user.id.toString(),
-                name: user.name || credentials.phone,
-                email: user.number
+              } else {
+                console.log("Password validation failed");
+                return null;
               }
             } catch(e) {
               console.error('Error in authorize function:', e);

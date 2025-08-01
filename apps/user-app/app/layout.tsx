@@ -2,13 +2,13 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Providers } from "../provider";
-import { AppbarClient } from "./components/AppbarClient";
+import { LayoutWrapper } from "./components/LayoutWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Wallet",
-  description: "Simple wallet app",
+  title: "PayFlow - Secure Payments Made Simple",
+  description: "Experience seamless money transfers, instant payments, and secure transactions with PayFlow.",
 };
 
 export default function RootLayout({
@@ -20,8 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <body className={inter.className}>
-          <AppbarClient />
-          <div>{children}</div>
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
         </body>
       </Providers>
     </html>
