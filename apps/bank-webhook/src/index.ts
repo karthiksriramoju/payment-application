@@ -77,4 +77,7 @@ app.post("/hdfcWebhook", async (req, res) => {
     }
 });
 
-app.listen(3003);
+const PORT = process.env.PORT || 3004;
+app.listen(PORT, () => {
+    console.log(`Bank webhook server running on port ${PORT}`);
+});

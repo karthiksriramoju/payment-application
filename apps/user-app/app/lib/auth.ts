@@ -14,31 +14,39 @@ export const authOptions = {
           },
           // TODO: User credentials type from next-aut
           async authorize(credentials: any) {
+            console.log("Authorize called with credentials:", { phone: credentials?.phone, hasPassword: !!credentials?.password });
+            
             if (!credentials?.phone || !credentials?.password) {
+              console.log("Missing credentials");
               return null;
             }
 
-            const existingUser = await db.user.findFirst({
-              where: {
-                number: credentials.phone
-              }
-            });
-
-            if (existingUser) {
-              const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
-              if (passwordValidation) {
-                return {
-                  id: existingUser.id.toString(),
-                  name: existingUser.name || credentials.phone,
-                  email: existingUser.number
-                }
-              }
-              return null;
-            }
-
-            // If user doesn't exist, create a new one
-            const hashedPassword = await bcrypt.hash(credentials.password, 10);
             try {
+              const existingUser = await db.user.findFirst({
+                where: {
+                  number: credentials.phone
+                }
+              });
+
+              console.log("Existing user found:", !!existingUser);
+
+              if (existingUser) {
+                const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
+                console.log("Password validation result:", passwordValidation);
+                
+                if (passwordValidation) {
+                  return {
+                    id: existingUser.id.toString(),
+                    name: existingUser.name || credentials.phone,
+                    email: existingUser.number
+                  }
+                }
+                return null;
+              }
+
+              // If user doesn't exist, create a new one
+              console.log("Creating new user");
+              const hashedPassword = await bcrypt.hash(credentials.password, 10);
               const user = await db.user.create({
                 data: {
                   number: credentials.phone,
@@ -55,21 +63,20 @@ export const authOptions = {
                 }
               });
           
+              console.log("New user created successfully");
               return {
                 id: user.id.toString(),
                 name: user.name || credentials.phone,
                 email: user.number
               }
             } catch(e) {
-              console.error('Error creating user:', e);
+              console.error('Error in authorize function:', e);
               return null;
             }
-
-            return null
           },
         })
     ],
-    secret: process.env.JWT_SECRET || "secret",
+    secret: process.env.NEXTAUTH_SECRET || "secret",
     callbacks: {
         async jwt({ token, user }: { token: JWT; user: any }) {
             if (user) {
@@ -91,6 +98,5 @@ export const authOptions = {
     pages: {
       signIn: "/signin", // Path to the custom sign-in page
     },
-    url: process.env.NEXTAUTH_URL,
   }
   

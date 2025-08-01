@@ -12,6 +12,7 @@ export default function SignInPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Attempting sign in with:", { phone, hasPassword: !!password });
 
     const result = await signIn("credentials", {
       redirect: false,
@@ -19,9 +20,13 @@ export default function SignInPage() {
       password,
     });
 
+    console.log("Sign in result:", result);
+
     if (result?.error) {
+      console.error("Sign in error:", result.error);
       setError("Invalid phone number or password");
     } else {
+      console.log("Sign in successful, redirecting to dashboard");
       // Redirect user after successful sign-in
       router.push("/dashboard");
     }
