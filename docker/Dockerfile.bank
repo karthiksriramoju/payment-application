@@ -8,11 +8,15 @@ COPY apps ./apps
 COPY packages ./packages
 
 # Install dependencies
-RUN npm install
-# Can you add a script to the global package.json that does this?
+RUN npm ci --only=production
+
+# Generate Prisma client
 RUN npm run db:generate
 
-# Can you filter the build down to just one app?
+# Build the bank webhook
 RUN npm run build-bank-webhook
+
+# Expose the port
+EXPOSE 3002
 
 CMD ["npm", "run", "start-bank-webhook"]

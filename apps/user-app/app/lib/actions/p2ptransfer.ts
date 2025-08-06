@@ -5,12 +5,12 @@ import prisma from "@repo/db/client";
 
 export async function p2pTransfer(to:number,amount: number) {
   const session = await getServerSession(authOptions)
-  const from = session.user?.id;
-  if(!from){
+  if(!session?.user || !session.user?.id){
     return {
       message: "Error while sending | Loged Out"
   }
   }
+  const from = session.user.id;
   const toUser = await prisma.user.findFirst({
     where:{
       number:to.toString(),

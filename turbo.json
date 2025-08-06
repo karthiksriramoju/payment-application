@@ -1,5 +1,6 @@
 {
   "globalDependencies": ["**/.env.*local"],
+  "globalEnv": ["NEXTAUTH_SECRET", "NEXTAUTH_URL", "DATABASE_URL", "JWT_SECRET"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

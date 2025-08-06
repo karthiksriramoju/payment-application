@@ -9,7 +9,7 @@ COPY apps/user-app/package*.json ./apps/user-app/
 COPY packages/*/package*.json ./packages/
 
 # Install dependencies
-RUN npm install
+RUN npm ci --only=production
 
 # Now copy the rest of the code
 COPY . .
@@ -22,5 +22,8 @@ RUN npx update-browserslist-db@latest
 
 # Build the user app
 RUN cd apps/user-app && npm run build
+
+# Expose the port
+EXPOSE 3000
 
 CMD ["npm", "run", "start-user-app"]

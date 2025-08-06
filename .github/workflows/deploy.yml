@@ -10,32 +10,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check Out Repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Generate Prisma client
+      run: npm run db:generate
 
     - name: Log in to Docker Hub
-      uses: docker/login-action@v1
+      uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and Push Docker Image for Next.js App
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
         push: true
         tags: karthik1417/patym-project-2:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     - name: Build and Push Docker Image for Express App
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v5
       with:
         context: .
         file: ./docker/Dockerfile.bank
         push: true
         tags: karthik1417/patym-webhook:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
-    - name: Deploy Next.js App to EC2
-      uses: appleboy/ssh-action@master
+    - name: Deploy Next.js App to Digital Ocean Droplet
+      uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
@@ -45,18 +61,18 @@ jobs:
           sudo docker stop web-app || true
           sudo docker rm web-app || true
           sudo docker run \
-            -e DATABASE_URL=${{ secrets.DB_URL }} \
-            -e NEXTAUTH_URL=${{ secrets.NEXT_URL }} \
-            -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e DATABASE_URL="${{ secrets.DB_URL }}" \
+            -e NEXTAUTH_URL="${{ secrets.NEXT_URL }}" \
+            -e NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
             --restart always \
             -d \
             --name web-app \
             -p 3000:3000 \
             karthik1417/patym-project-2:latest
 
-    - name: Deploy Express App to EC2
-      uses: appleboy/ssh-action@master
+    - name: Deploy Express App to Digital Ocean Droplet
+      uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST_BANK }}
         username: ${{ secrets.SSH_USERNAME }}
@@ -66,7 +82,7 @@ jobs:
           sudo docker stop patym-webhook || true
           sudo docker rm patym-webhook || true
           sudo docker run \
-            -e DATABASE_URL=${{ secrets.DB_URL }} \
+            -e DATABASE_URL="${{ secrets.DB_URL }}" \
             --restart always \
             -d \
             --name patym-webhook \
