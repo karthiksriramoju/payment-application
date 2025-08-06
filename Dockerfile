@@ -1,18 +1,15 @@
 FROM node:20.12.0-alpine3.19
 
+# Install build dependencies for native modules
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /usr/src/app
 
-# First, copy only package files to leverage Docker cache
-COPY package*.json ./
-COPY turbo.json tsconfig.json ./
-COPY apps/user-app/package*.json ./apps/user-app/
-COPY packages/*/package*.json ./packages/
-
-# Install dependencies
-RUN npm ci --only=production
-
-# Now copy the rest of the code
+# Copy all files at once to avoid cache issues
 COPY . .
+
+# Install dependencies and rebuild bcrypt
+RUN npm ci && npm rebuild bcrypt --build-from-source
 
 # Generate Prisma client
 RUN cd packages/db && npx prisma generate

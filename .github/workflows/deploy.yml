@@ -37,8 +37,6 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: karthik1417/patym-project-2:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
 
     - name: Build and Push Docker Image for Express App
       uses: docker/build-push-action@v5
@@ -47,8 +45,6 @@ jobs:
         file: ./docker/Dockerfile.bank
         push: true
         tags: karthik1417/patym-webhook:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
 
     - name: Deploy Next.js App to Digital Ocean Droplet
       uses: appleboy/ssh-action@v1.0.3
