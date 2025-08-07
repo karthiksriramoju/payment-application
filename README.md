@@ -35,8 +35,8 @@ Follow these steps to set up and run the project:
 
 1. **Clone the Repository:**
    ```sh
-   git clone https://github.com/karthiksriramoju/patym-project-2.git
-   cd patym-project-2
+   git clone https://github.com/karthiksriramoju/payment-applicatoin.git
+   cd payment-application
    ```
 
 2. **Install Dependencies:**
