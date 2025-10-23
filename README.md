@@ -5,7 +5,7 @@ I've completed the development of a **Paytm-like payment app**! This project has
 
 ## 🛠 Tech Stack
 - **Frontend & Backend:** Next.js
-- **Auxiliary Backend:** Express
+- **Auxiliary Backend:** Express 
 - **Monorepo Management:** Turborepo
 - **Database:** PostgreSQL with Prisma ORM
 - **UI Styling:** Tailwind CSS
